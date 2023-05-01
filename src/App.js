@@ -1,51 +1,46 @@
 
-import React, { useState, useEffect } from 'react';
-import {supabase} from './supabaseclient';
+import { useState, useEffect } from 'react';
+import { supabase } from './supabaseclient';
 import logo from './logo.svg';
 import './App.css';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 
 function Library() {
-  const [data, setData] = useState([]);
-
+  // The useState hook lets us store data in a component across renders
+  // setMyBooks is a setter function that updates the state of myBooks
+  const [myPrem, setMyPrem] = useState([]);
+  
+  // This should look familar from Codepen
+  async function getPrem() {
+    let { data: Prem, error } = await supabase
+      .from('Prem')
+      .select('*')
+    // Update the state
+    setMyPrem(Prem);
+    console.log(Prem);
+  }
+  
   useEffect(() => {
-    async function fetchData() {
-      const { data, error } = await supabase
-        .from('UCL')
-        .select('Team, Mascot, Points')
-        .order('id', { ascending: true });
-      if (error) {
-        console.log(error);
-      } else {
-        setData(data);
-      }
-    }
-    fetchData();
+    // Execute the function when the component mounts
+    getPrem();
   }, []);
-
+  
+  // Below is what displays when you use <Library />
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Team</th>
-            <th>Mascot</th>
-            <th>Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <tr key={row.id}>
-              <td>{row.Team}</td>
-              <td>{row.Mascot}</td>
-              <td>{row.Points}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    <table>
+    {
+      myPrem.map(b => (
+        <tr>
+          <h1>test</h1>
+          <td>{b.Name}</td>
+          <td>{b.Mascot}</td>
+          <td>{b.Wins}</td>
+        </tr>
+      ))
+    }
+    </table>
+  )
 }
 
 
