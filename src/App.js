@@ -1,5 +1,7 @@
+import {supabase} from './supabaseclient';
 import logo from './logo.svg';
 import './App.css';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 function App() {
   return (
